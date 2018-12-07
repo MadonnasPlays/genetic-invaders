@@ -24,6 +24,8 @@ let generation;
 
 let timescale;
 
+let fireFrameLimit;
+
 let createNewGeneration;
 
 function setup() {
@@ -31,7 +33,8 @@ function setup() {
 	frameRate(60);
 
 	fireTime = 0;
-	fireTimeLimit = 15;
+	fireFrameLimit =15;
+	
 	bulletAmount = 5;
 
 	enemyMaxPop = 50;
@@ -49,14 +52,13 @@ function setup() {
 	createNewGeneration = true;
 
 	timescale = 1;
-	fireTimeLimit = fireTimeLimit / timescale;
 
 	Player = new player();
 }
 
 function draw() {
 	background(0);
-
+	fireTimeLimit = fireFrameLimit / timescale;
 	//textAlign(RIGHT);.
 	text("Generation: " + generation, 5, 15);
 	text("TotalAlive: " + totalEnemies, 5, 30);
