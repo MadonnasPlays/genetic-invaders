@@ -22,6 +22,8 @@ let totalKills;
 let totalPassed;
 let generation;
 
+let createNewGeneration;
+
 function setup() {
 	createCanvas(500, 800);
 	frameRate(60);
@@ -30,17 +32,19 @@ function setup() {
 	fireTimeLimit = 15;
 	bulletAmount = 5;
 
-	enemyMaxPop = 10;
+	enemyMaxPop = 50;
 	currentAliveEnemies = 0;
 
 	firstRound = true;
 
-	autoFire = false;
+	autoFire = true;
 
 	totalEnemies = 0;
 	totalKills = 0;
 	totalPassed = 0;
 	generation = 1;
+
+	createNewGeneration = true;
 
 	Player = new player();
 }
@@ -66,6 +70,8 @@ function draw() {
 
 	//ENEMIES
 	for (let i = enemies.length-1; i >= 0; i--){
+		if(enemies[i].frameStart >= frameCount) continue;
+
 		enemies[i].think();
 		enemies[i].update();
 		enemies[i].show();
@@ -74,23 +80,15 @@ function draw() {
 			enemies[i].score = enemies[i].y/height;
 			oldEnemies.push(enemies[i]);
 			enemies.splice(i, 1);
-			break;
+			continue;
 		}
 
 		if(enemies[i].outOfScreenB()) {
-			
-			enemies[i].score = (enemies[i].y/height)+100;
+			enemies[i].score = (enemies[i].y/height)+2;
 			oldEnemies.push(enemies[i]);
 			enemies.splice(i, 1);
-
 			totalPassed++;
-
-			break;
 		}
-
-		// if(random(0, 10) < 1 && frameCount % 10 == 0){
-		// 	enemies[i].turn();
-		// }
 	}
 
 	//PLAYER
@@ -110,14 +108,6 @@ function draw() {
   		}
   	}
 
-  	////////////
-  	// if(bullets.length < bulletAmount && fireTime > fireTimeLimit){
-  	// 	if(autoFire) {
-  	// 		bullets.push(new bullet(random(10,width-10), height - height/25/10-height/25));
-  	// 		fireTime = 0;
-  	// 	}
-  	// }
-
 	Player.show();
 
 	//BULLETS
@@ -127,7 +117,7 @@ function draw() {
 		
 		if(bullets[i].outOfScreen()) {
 			bullets.splice(i, 1);
-			break;
+			continue;
 		}
 
 		for(let j = enemies.length-1; j >= 0; j--) {
@@ -142,23 +132,30 @@ function draw() {
 
 				break;
 			}
-		}	
+		}
 	}
 
 	//Spawn enemy
-	if(currentAliveEnemies < enemyMaxPop) {
-		if(frameCount % 15 == 0){
+	if(createNewGeneration) {
+		//if(frameCount % 15 == 0){
+		for(let i = 0; i < enemyMaxPop; i++) {
 			let enem;
 			if(firstRound){
 				enem = new enemy();
 			}else{
 				enem = new enemy(poolSelection());
 			}
+			enem.frameStart = frameCount + (15 * i);
 			enemies.push(enem);
 
 			totalEnemies++;
 			currentAliveEnemies++;
 		}
+
+		createNewGeneration = false;
+
+		oldEnemies = [];
+		//}
 	}else{
 		if(enemies.length == 0){
 			//New Generation
@@ -168,7 +165,7 @@ function draw() {
 
 			generation++;
 
-			currentAliveEnemies = 0;
+			createNewGeneration = true;
 		}
 	}
 }
@@ -177,18 +174,19 @@ function poolSelection() {
 	let sum1 = 0;
 	let sum2 = 0;
 
-	for(let i = oldEnCount-1; i >= oldEnCount-enemyMaxPop; i--) {
+	for(let i = enemyMaxPop-1; i >= 0; i--) {
 		sum1 += oldEnemies[i].score;
 	}
-
+	
 	let randVal = random(0, sum1);
 
-	for(let i = oldEnCount-1; i >= oldEnCount-enemyMaxPop; i--) {
+	for(let i = enemyMaxPop-1; i >= 0; i--) {
 		sum2 += oldEnemies[i].score;
 		if(sum2 > randVal) {
 			return oldEnemies[i].brain;
 		}
 	}
+
 	//never gonna return null...just in case
 	return null;
 }
