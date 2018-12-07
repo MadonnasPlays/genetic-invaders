@@ -7,7 +7,7 @@ function mutate(x) {
     return x;
   }
 }
-
+//
 function enemy(brain) {
 	this.h = height/50;
 	this.w = this.h;
