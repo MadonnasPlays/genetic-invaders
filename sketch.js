@@ -22,6 +22,8 @@ let totalKills;
 let totalPassed;
 let generation;
 
+let timescale;
+
 let createNewGeneration;
 
 function setup() {
@@ -45,6 +47,9 @@ function setup() {
 	generation = 1;
 
 	createNewGeneration = true;
+
+	timescale = 1;
+	fireTimeLimit = fireTimeLimit / timescale;
 
 	Player = new player();
 }
@@ -145,7 +150,7 @@ function draw() {
 			}else{
 				enem = new enemy(poolSelection());
 			}
-			enem.frameStart = frameCount + (15 * i);
+			enem.frameStart = frameCount + ((15.0/timescale) * i);
 			enemies.push(enem);
 
 			totalEnemies++;

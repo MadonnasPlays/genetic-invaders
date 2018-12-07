@@ -6,7 +6,6 @@ function player() {
 	this.y = height - this.h/10;
 
 	this.speed = this.w/5;
-
 	this.show = function() {
     	noStroke();
     	fill(255, 255, 255);
@@ -14,11 +13,11 @@ function player() {
   	}
 
   	this.left = function() {
-		this.x -= this.speed;
+		this.x -= this.speed * timescale;
   	}
 
   	this.right = function() {
-  		this.x += this.speed;
+  		this.x += this.speed * timescale;
   	}
 
   	this.fire = function() {
@@ -42,7 +41,7 @@ function bullet(x, y) {
 	}
 
 	this.update = function() {
-		this.y -= this.speed;
+		this.y -= this.speed * timescale;
 	}
 
 	this.outOfScreen = function() {

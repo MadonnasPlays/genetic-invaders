@@ -30,6 +30,8 @@ function enemy(brain) {
     this.brain = new NeuralNetwork(12, 20, 3);
   }
 
+  this.timescale = timescale;
+
   this.copy = function() {
     return new enemy(this.brain);
   }
@@ -96,8 +98,8 @@ function enemy(brain) {
   }
 
   this.update = function() {
-    this.y += this.speedY;
-    this.x += this.speedX;
+    this.y += this.speedY * timescale;
+    this.x += this.speedX * timescale;
   }
 
   this.outOfScreenLR = function() {
