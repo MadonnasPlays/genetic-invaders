@@ -28,6 +28,8 @@ let fireFrameLimit;
 
 let createNewGeneration;
 
+let poolCalculated;
+
 function setup() {
 	createCanvas(500, 800);
 	frameRate(60);
@@ -37,7 +39,7 @@ function setup() {
 	
 	bulletAmount = 5;
 
-	enemyMaxPop = 50;
+	enemyMaxPop = 5;
 	currentAliveEnemies = 0;
 
 	firstRound = true;
@@ -48,6 +50,8 @@ function setup() {
 	totalKills = 0;
 	totalPassed = 0;
 	generation = 1;
+
+	poolCalculated = false;
 
 	createNewGeneration = true;
 
@@ -173,25 +177,40 @@ function draw() {
 			generation++;
 
 			createNewGeneration = true;
+			poolCalculated = false;
 		}
 	}
 }
 
 function poolSelection() {
-	let sum1 = 0;
-	let sum2 = 0;
 
-	for(let i = enemyMaxPop-1; i >= 0; i--) {
-		sum1 += oldEnemies[i].score;
-	}
-	
-	let randVal = random(0, sum1);
+	if(!poolCalculated){
+		let sum1 = 0;
+		let sum2 = 0;
 
-	for(let i = enemyMaxPop-1; i >= 0; i--) {
-		sum2 += oldEnemies[i].score;
-		if(sum2 > randVal) {
-			return oldEnemies[i].brain;
+		for(let i = enemyMaxPop-1; i >= 0; i--) {
+			sum1 += oldEnemies[i].score;
 		}
+
+		for(let i = enemyMaxPop-1; i >= 0; i--) {
+			oldEnemies[i].score /= sum1;
+		}
+
+		oldEnemies.sort(function(a, b) {
+	  		return b.score -a.score;
+		});
+
+		for(let i = 0; i < enemyMaxPop-1; i++) {
+			oldEnemies[i+1].score += oldEnemies[i].score; 
+		}
+		console.log(oldEnemies[enemyMaxPop-1].score);
+
+		poolCalculated = true;
+	}
+	let rand = random(1);
+
+	for(let i = 0; i < enemyMaxPop-1; i++) {
+		if(oldEnemies[i].score >= rand) return  oldEnemies[i].brain;
 	}
 
 	//never gonna return null...just in case
