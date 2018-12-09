@@ -72,8 +72,8 @@ function draw() {
 	fireTimeLimit = fireFrameLimit / timescale;
 	text("Generation: " + generation, 5, 15);
 	text("Enemies Generated: " + enemiesGenerated, 5, 30);
-	text("Gen Best: "+ generationBest,5,45);
-	text("Gen Avg: "+ generationAvg,5,60);
+	text("Gen Best: "+ round(100*generationBest),5,45);
+	text("Gen Avg: "+ round(100*generationAvg),5,60);
 	text("Kills: " + totalKills, 5, 75);
 	text("Passed: " + totalPassed, 5, 90);
 
@@ -208,12 +208,15 @@ function poolSelection() {
 
 		for(let i = enemyMaxPop-1; i >= 0; i--) {
 			oldEnemies[i].score /= sum1;
+			sum2 += oldEnemies[i].score;
 		}
+		generationAvg = sum2 / enemyMaxPop;
 
 		oldEnemies.sort(function(a, b) {
 	  		return b.score -a.score;
 		});
-		generationBest =  oldEnemies[0].score;
+		print(oldEnemies)
+		generationBest = oldEnemies[0].score;
 
 		for(let i = 0; i < enemyMaxPop-1; i++) {
 			oldEnemies[i+1].score += oldEnemies[i].score;

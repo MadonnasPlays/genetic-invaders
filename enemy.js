@@ -47,7 +47,7 @@ function enemy(brain) {
 
 	    if(bullets[i] != null) inputs[i*2+1] = bullets[i].y/height;
 	    else inputs[i*2+1] = -1;
-	}
+		}
 
     //this x,y
     inputs[10] = this.x/width;
