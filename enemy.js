@@ -69,6 +69,7 @@ function enemy(brain) {
     }
 
   }
+  
   this.calculateScore = function(extraPoints = 0){
   	var scoreScreenProgress = this.y/height;
   	var scorePlayerDist = 1.0 / distance(this.x,this.y,Player.x,Player.y); 

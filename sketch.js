@@ -48,8 +48,6 @@ function setup() {
 	generationBest =0;
 	generationAvg = 0;
 
-	
-
 	enemiesGenerated = 0;
 	totalKills = 0;
 	totalPassed = 0;
@@ -64,7 +62,6 @@ function setup() {
 	autoFire = true;
 	enemyMaxPop = 5;
 	//----------------------------------------------------//
-	
 }
 
 function draw() {
@@ -176,7 +173,7 @@ function draw() {
 		oldEnemies = [];
 		//}
 	}else{
-		if(enemies.length == 0){
+		if(enemies.length == 0) {
 			//New Generation
 			firstRound = false;
 			
@@ -191,32 +188,30 @@ function draw() {
 }
 
 function distance(x1,y1,x2,y2){
-	return Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
+	return Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
 }
 
 function poolSelection() {
 	//https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)
 	if(!poolCalculated){
 		let sum1 = 0;
-		let sum2 = 0;
 
 		for(let i = enemyMaxPop-1; i >= 0; i--) {
 			sum1 += oldEnemies[i].score;
 		}
 
-		generationAvg = sum1 / enemyMaxPop;
-
-		for(let i = enemyMaxPop-1; i >= 0; i--) {
-			oldEnemies[i].score /= sum1;
-			sum2 += oldEnemies[i].score;
-		}
-		generationAvg = sum2 / enemyMaxPop;
-
 		oldEnemies.sort(function(a, b) {
 	  		return b.score -a.score;
 		});
-		print(oldEnemies)
+
+		generationAvg = sum1 / enemyMaxPop;
 		generationBest = oldEnemies[0].score;
+
+		for(let i = enemyMaxPop-1; i >= 0; i--) {
+			oldEnemies[i].score /= sum1;
+		}
+
+		print(oldEnemies)
 
 		for(let i = 0; i < enemyMaxPop-1; i++) {
 			oldEnemies[i+1].score += oldEnemies[i].score;
@@ -226,6 +221,7 @@ function poolSelection() {
 
 		poolCalculated = true;
 	}
+
 	let rand = random(1);
 
 	for(let i = 0; i < enemyMaxPop-1; i++) {
@@ -238,8 +234,10 @@ function poolSelection() {
 
 function maxOfArray(array) {
 	let maxIndex = 0;
+
 	for(let i = 0; i < array.length; i++) {
 		if(array[maxIndex] < array[i]) maxIndex = i;
 	}
+
 	return maxIndex;
 }
