@@ -27,7 +27,10 @@ function enemy(brain) {
     this.brain = brain.copy();
     this.brain.mutate(mutate);
   } else {
-    this.brain = new NeuralNetwork(14, 25, 3);
+  	input_size = 4+bulletAmount*2;
+  	output_size =3;
+  	hidden_size = 5;
+    this.brain = new NeuralNetwork(input_size, hidden_size, output_size);
   }
 
   this.timescale = timescale;
@@ -38,27 +41,27 @@ function enemy(brain) {
 
   this.think = function() {
     let inputs = [];
-
-
-    for(var i in bullets){
-	    //bullet i x,y
-	    if(bullets[i] != null) inputs[i*2 +0] = bullets[i].x/width;
-	    else inputs[i*2 +0] = -1;
-
-	    if(bullets[i] != null) inputs[i*2+1] = bullets[i].y/height;
-	    else inputs[i*2+1] = -1;
-		}
-
+    
     //this x,y
-    inputs[10] = this.x/width;
-    inputs[11] = this.y/height;
+    inputs[0] = this.x/width;
+    inputs[1] = this.y/height;
 
     //player x,y
-    inputs[12] = Player.x/width;
-    inputs[13] = Player.y/height;
+    inputs[2] = Player.x/width;
+    inputs[3] = Player.y/height;
+
+    for(var i=0;i<bulletAmount;i++){
+	    //bullet i x,y
+	    if(bullets[i] != null) inputs[4+i*2 +0] = bullets[i].x/width;
+	    else inputs[4+i*2 +0] = -1;
+
+	    if(bullets[i] != null) inputs[4+i*2+1] = bullets[i].y/height;
+	    else inputs[4+i*2+1] = -1;
+		}
+
 
     let action = this.brain.predict(inputs);
-
+    
     let max = maxOfArray(action);
     if(max == 0) {
       this.turnLeft();

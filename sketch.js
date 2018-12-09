@@ -40,7 +40,7 @@ function setup() {
 	fireTime = 0;
 	fireFrameLimit =15;
 	
-	bulletAmount = 5;
+	bulletAmount = 100;
 	currentAliveEnemies = 0;
 
 	firstRound = true;
@@ -210,8 +210,6 @@ function poolSelection() {
 		for(let i = enemyMaxPop-1; i >= 0; i--) {
 			oldEnemies[i].score /= sum1;
 		}
-
-		print(oldEnemies)
 
 		for(let i = 0; i < enemyMaxPop-1; i++) {
 			oldEnemies[i+1].score += oldEnemies[i].score;
