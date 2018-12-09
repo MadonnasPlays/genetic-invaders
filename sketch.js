@@ -31,7 +31,7 @@ let createNewGeneration;
 let poolCalculated;
 
 function setup() {
-	createCanvas(500, 800);
+	createCanvas(500, window.innerHeight-10);
 	frameRate(60);
 
 	fireTime = 0;
