@@ -17,10 +17,13 @@ let oldEnCount;
 
 let autoFire;
 
-let totalEnemies;
+let enemiesGenerated;
 let totalKills;
 let totalPassed;
 let generation;
+
+let generationBest;
+let generationAvg;
 
 let timescale;
 
@@ -38,36 +41,41 @@ function setup() {
 	fireFrameLimit =15;
 	
 	bulletAmount = 5;
-
-	enemyMaxPop = 20;
 	currentAliveEnemies = 0;
 
 	firstRound = true;
 
-	autoFire = true;
+	generationBest =0;
+	generationAvg = 0;
 
-	totalEnemies = 0;
+	
+
+	enemiesGenerated = 0;
 	totalKills = 0;
 	totalPassed = 0;
 	generation = 1;
-
 	poolCalculated = false;
-
 	createNewGeneration = true;
-
-	timescale = 2;
-
 	Player = new player();
+
+	//----------------------------------------------------//
+	//Configure game parameters
+	timescale = 1;
+	autoFire = true;
+	enemyMaxPop = 5;
+	//----------------------------------------------------//
+	
 }
 
 function draw() {
 	background(0);
 	fireTimeLimit = fireFrameLimit / timescale;
-	//textAlign(RIGHT);.
 	text("Generation: " + generation, 5, 15);
-	text("TotalAlive: " + totalEnemies, 5, 30);
-	text("Kills: " + totalKills, 5, 45);
-	text("Passed: " + totalPassed, 5, 60);
+	text("Enemies Generated: " + enemiesGenerated, 5, 30);
+	text("Gen Best: "+ generationBest,5,45);
+	text("Gen Avg: "+ generationAvg,5,60);
+	text("Kills: " + totalKills, 5, 75);
+	text("Passed: " + totalPassed, 5, 90);
 
 	//key 79 = o
 	if (keyIsDown(79)) {
@@ -159,7 +167,7 @@ function draw() {
 			enem.frameStart = frameCount + ((15.0/timescale) * i);
 			enemies.push(enem);
 
-			totalEnemies++;
+			enemiesGenerated++;
 			currentAliveEnemies++;
 		}
 
@@ -196,6 +204,8 @@ function poolSelection() {
 			sum1 += oldEnemies[i].score;
 		}
 
+		generationAvg = sum1 / enemyMaxPop;
+
 		for(let i = enemyMaxPop-1; i >= 0; i--) {
 			oldEnemies[i].score /= sum1;
 		}
@@ -203,6 +213,7 @@ function poolSelection() {
 		oldEnemies.sort(function(a, b) {
 	  		return b.score -a.score;
 		});
+		generationBest =  oldEnemies[0].score;
 
 		for(let i = 0; i < enemyMaxPop-1; i++) {
 			oldEnemies[i+1].score += oldEnemies[i].score;

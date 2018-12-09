@@ -5,7 +5,7 @@ function player() {
 	this.x = width/2;
 	this.y = height - this.h/10;
 
-	this.speed = this.w/5;
+	this.speed = (this.w/5);
 	this.show = function() {
     	noStroke();
     	fill(255, 255, 255);
