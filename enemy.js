@@ -27,7 +27,7 @@ function enemy(brain) {
     this.brain = brain.copy();
     this.brain.mutate(mutate);
   } else {
-    this.brain = new NeuralNetwork(12, 20, 3);
+    this.brain = new NeuralNetwork(14, 25, 3);
   }
 
   this.timescale = timescale;
@@ -78,6 +78,9 @@ function enemy(brain) {
     inputs[10] = this.x/width;
     inputs[11] = this.y/height;
 
+    inputs[12] = Player.x/width;
+    inputs[13] = Player.y/height;
+
     let action = this.brain.predict(inputs);
 
     let max = maxOfArray(action);
@@ -90,8 +93,12 @@ function enemy(brain) {
     }
 
   }
-
-	this.show = function() {
+  this.calculateScore = function(extraPoints =0){
+  	var scoreScreenProgress = this.y/height;
+  	var scorePlayerDist = 1.0 / distance(this.x,this.y,Player.x,Player.y); 
+  	this.score =  scoreScreenProgress + extraPoints;
+  }
+  this.show = function() {
     noStroke();
     fill(255, 150, 150);
     triangle(this.x-this.w/2, this.y, this.x, this.y+this.h, this.x+this.w/2, this.y);

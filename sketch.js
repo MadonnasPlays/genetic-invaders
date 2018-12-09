@@ -1,4 +1,4 @@
-var Player;
+let Player;
 
 var bullets = [];
 
@@ -39,7 +39,7 @@ function setup() {
 	
 	bulletAmount = 5;
 
-	enemyMaxPop = 5;
+	enemyMaxPop = 20;
 	currentAliveEnemies = 0;
 
 	firstRound = true;
@@ -55,7 +55,7 @@ function setup() {
 
 	createNewGeneration = true;
 
-	timescale = 1;
+	timescale = 2;
 
 	Player = new player();
 }
@@ -88,14 +88,14 @@ function draw() {
 		enemies[i].show();
 
 		if(enemies[i].outOfScreenLR()) {
-			enemies[i].score = enemies[i].y/height;
+			enemies[i].calculateScore();
 			oldEnemies.push(enemies[i]);
 			enemies.splice(i, 1);
 			continue;
 		}
 
 		if(enemies[i].outOfScreenB()) {
-			enemies[i].score = (enemies[i].y/height)+2;
+			enemies[i].calculateScore(1.0);
 			oldEnemies.push(enemies[i]);
 			enemies.splice(i, 1);
 			totalPassed++;
@@ -135,7 +135,7 @@ function draw() {
 			if(bullets[i].hitted(enemies[j])) {
 				bullets.splice(i, 1);
 
-				enemies[j].score = enemies[j].y/height;
+				enemies[j].calculateScore(-0.5);
 				oldEnemies.push(enemies[j]);
 				enemies.splice(j, 1);
 
@@ -182,8 +182,12 @@ function draw() {
 	}
 }
 
-function poolSelection() {
+function distance(x1,y1,x2,y2){
+	return Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
+}
 
+function poolSelection() {
+	//https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)
 	if(!poolCalculated){
 		let sum1 = 0;
 		let sum2 = 0;
@@ -201,9 +205,10 @@ function poolSelection() {
 		});
 
 		for(let i = 0; i < enemyMaxPop-1; i++) {
-			oldEnemies[i+1].score += oldEnemies[i].score; 
+			oldEnemies[i+1].score += oldEnemies[i].score;
+			console.log(oldEnemies[i].score) 
 		}
-		console.log(oldEnemies[enemyMaxPop-1].score);
+		//console.log(oldEnemies[enemyMaxPop-1].score);
 
 		poolCalculated = true;
 	}
