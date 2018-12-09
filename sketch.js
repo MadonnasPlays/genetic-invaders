@@ -143,7 +143,7 @@ function draw() {
 			if(bullets[i].hitted(enemies[j])) {
 				bullets.splice(i, 1);
 
-				enemies[j].calculateScore(-0.5);
+				enemies[j].calculateScore();
 				oldEnemies.push(enemies[j]);
 				enemies.splice(j, 1);
 
@@ -217,7 +217,7 @@ function poolSelection() {
 
 		for(let i = 0; i < enemyMaxPop-1; i++) {
 			oldEnemies[i+1].score += oldEnemies[i].score;
-			console.log(oldEnemies[i].score) 
+			//console.log(oldEnemies[i].score) 
 		}
 		//console.log(oldEnemies[enemyMaxPop-1].score);
 

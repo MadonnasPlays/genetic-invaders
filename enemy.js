@@ -39,45 +39,21 @@ function enemy(brain) {
   this.think = function() {
     let inputs = [];
 
-    //bullet1 x,y
-    if(bullets[0] != null) inputs[0] = bullets[0].x/width;
-    else inputs[0] = -1;
 
-    if(bullets[0] != null) inputs[1] = bullets[0].y/height;
-    else inputs[1] = -1;
+    for(var i in bullets){
+	    //bullet i x,y
+	    if(bullets[i] != null) inputs[i*2 +0] = bullets[i].x/width;
+	    else inputs[i*2 +0] = -1;
 
-    //bullet2 x,y
-    if(bullets[1] != null) inputs[2] = bullets[1].x/width;
-    else inputs[2] = -1;
-
-    if(bullets[1] != null) inputs[3] = bullets[1].y/height;
-    else inputs[3] = -1;
-
-    //bullet3 x,y
-    if(bullets[2] != null) inputs[4] = bullets[2].x/width;
-    else inputs[4] = -1;
-
-    if(bullets[2] != null) inputs[5] = bullets[2].y/height;
-    else inputs[5] = -1;
-
-    //bullet4 x,y
-    if(bullets[3] != null) inputs[6] = bullets[3].x/width;
-    else inputs[6] = -1;
-
-    if(bullets[3] != null) inputs[7] = bullets[3].y/height;
-    else inputs[7] = -1;
-
-    //bullet5 x,y
-    if(bullets[4] != null) inputs[8] = bullets[4].x/width;
-    else inputs[8] = -1;
-
-    if(bullets[4] != null) inputs[9] = bullets[4].y/height;
-    else inputs[9] = -1;
+	    if(bullets[i] != null) inputs[i*2+1] = bullets[i].y/height;
+	    else inputs[i*2+1] = -1;
+	}
 
     //this x,y
     inputs[10] = this.x/width;
     inputs[11] = this.y/height;
 
+    //player x,y
     inputs[12] = Player.x/width;
     inputs[13] = Player.y/height;
 
@@ -93,11 +69,12 @@ function enemy(brain) {
     }
 
   }
-  this.calculateScore = function(extraPoints =0){
+  this.calculateScore = function(extraPoints = 0){
   	var scoreScreenProgress = this.y/height;
   	var scorePlayerDist = 1.0 / distance(this.x,this.y,Player.x,Player.y); 
   	this.score =  scoreScreenProgress + extraPoints;
   }
+
   this.show = function() {
     noStroke();
     fill(255, 150, 150);
